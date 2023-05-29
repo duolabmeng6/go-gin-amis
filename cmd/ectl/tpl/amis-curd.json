@@ -1,0 +1,172 @@
+{
+  "type": "page",
+  "title": "文章管理",
+  "remark": null,
+  "name": "page-demo",
+  "body": [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "api": {
+        "method": "get",
+        "url": "/admin/articles"
+      },
+      "columns": [
+        {
+          "name": "id",
+          "label": "ID",
+          "type": "text",
+          "sortable": true
+        },
+        {
+          "name": "title",
+          "label": "标题",
+          "type": "text"
+        },
+        {
+          "type": "datetime",
+          "label": "创建时间",
+          "name": "created_at"
+        },
+        {
+          "type": "operation",
+          "label": "操作",
+          "buttons": [
+            {
+              "label": "编辑",
+              "type": "button",
+              "level": "link",
+              "actionType": "drawer",
+              "drawer": {
+                "position": "right",
+                "size": "lg",
+                "title": "编辑",
+                "body": {
+                  "type": "form",
+                  "initApi": "/admin/articles/${id}/edit",
+                  "api": "put:/admin/articles/${id}",
+                  "body": [
+                    {
+                      "name": "title",
+                      "label": "标题",
+                      "type": "input-text"
+                    },
+                    {
+                      "type": "input-rich-text",
+                      "name": "content",
+                      "label": "内容"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "label": "查看",
+              "type": "button",
+              "actionType": "dialog",
+              "level": "link",
+              "dialog": {
+                "title": "查看详情",
+                "body": {
+                  "type": "form",
+                  "initApi": "get:/admin/articles/${id}/edit",
+                  "body": [
+                    {
+                      "name": "id",
+                      "label": "ID",
+                      "type": "static"
+                    },
+                    {
+                      "name": "title",
+                      "label": "标题",
+                      "type": "static"
+                    },
+                    {
+                      "type": "input-rich-text",
+                      "name": "content",
+                      "label": "内容"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "button",
+              "label": "删除",
+              "actionType": "ajax",
+              "level": "link",
+              "className": "text-danger",
+              "confirmText": "确定要删除？",
+              "api": "delete:/admin/articles/${id}"
+            }
+          ]
+        }
+      ],
+      "bulkActions": [
+        {
+          "type": "button",
+          "level": "danger",
+          "label": "批量删除",
+          "confirmText": "确定要删除？",
+          "actionType": "ajax",
+          "api": "delete:/admin/articles/bulkDelete/${ids|raw}"
+        }
+      ],
+      "itemActions": [],
+      "features": [
+        "create",
+        "filter",
+        "bulkDelete",
+        "update",
+        "view",
+        "delete"
+      ],
+      "filterColumnCount": 3,
+      "headerToolbar": [
+        {
+          "label": "新增",
+          "type": "button",
+          "level": "primary",
+          "actionType": "drawer",
+          "drawer": {
+            "position": "right",
+            "size": "lg",
+            "title": "新增",
+            "body": {
+              "type": "form",
+              "api": "post:/admin/articles",
+              "body": [
+                {
+                  "type": "input-text",
+                  "name": "title",
+                  "label": "标题"
+                },
+                {
+                  "type": "input-rich-text",
+                  "name": "content",
+                  "label": "内容"
+                }
+              ]
+            }
+          }
+        },
+        "bulkActions"
+      ],
+      "id": "u:c3167575b83d",
+      "perPageAvailable": [
+        10
+      ],
+      "messages": {},
+      "filter": {
+        "title": "查询条件",
+        "body": [
+          {
+            "type": "input-text",
+            "name": "keywords",
+            "label": "关键字"
+          }
+        ]
+      }
+    }
+  ]
+}
