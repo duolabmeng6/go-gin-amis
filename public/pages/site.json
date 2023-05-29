@@ -21,9 +21,9 @@
         "children": [
           {
             "label": "用户管理",
-            "url": "/user/list",
+            "url": "/pages/users",
             "icon": "fa fa-cube",
-            "schemaApi": "get:/pages/user-list.json"
+            "schemaApi": "get:/pages/users.json"
           }
         ]
       },

@@ -18,6 +18,7 @@ type AdminRouter struct {
 	Login     Controllers.LoginController
 	Admin     Controllers.AdminController
 	Articles  Controllers.ArticlesController
+	Users     Controllers.UsersController
 	AmisPages Controllers.AmisPagesController
 }
 
@@ -25,6 +26,7 @@ var RouterGroupApp = new(RouterGroup)
 
 func Init(Router *gin.Engine) {
 	RouterGroupApp.Admin.Articles.Init()
+	RouterGroupApp.Admin.Users.Init()
 
 	Router.GET("/", RouterGroupApp.Web.Home.Index)
 	{
@@ -48,7 +50,7 @@ func Init(Router *gin.Engine) {
 			Auth.PUT("/amis-pages/:id", RouterGroupApp.Admin.AmisPages.Update)     //更新数据
 			Auth.DELETE("/amis-pages/:id", RouterGroupApp.Admin.AmisPages.Destroy) //删除数据
 			// 文章管理路由
-			Auth.GET("/articles", RouterGroupApp.Admin.Articles.Index)                                                 //列表
+			Auth.GET("/articles", egin.AutoVerifyHandler(RouterGroupApp.Admin.Articles.Index))                         //列表
 			Auth.GET("/articles/create", egin.AutoVerifyHandler(RouterGroupApp.Admin.Articles.Create))                 //创建页面
 			Auth.POST("/articles", egin.AutoVerifyHandler(RouterGroupApp.Admin.Articles.Store))                        //保存数据
 			Auth.GET("/articles/:id", egin.AutoVerifyHandler(RouterGroupApp.Admin.Articles.Show))                      //详情
@@ -56,6 +58,16 @@ func Init(Router *gin.Engine) {
 			Auth.PUT("/articles/:id", egin.AutoVerifyHandler(RouterGroupApp.Admin.Articles.Update))                    //更新数据
 			Auth.DELETE("/articles/:id", egin.AutoVerifyHandler(RouterGroupApp.Admin.Articles.Destroy))                //删除数据
 			Auth.DELETE("/articles/bulkDelete/:ids", egin.AutoVerifyHandler(RouterGroupApp.Admin.Articles.BulkDelete)) //删除数据
+			//用户管理路由
+			// 文章管理路由
+			Auth.GET("/users", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.Index))                         //列表
+			Auth.GET("/users/create", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.Create))                 //创建页面
+			Auth.POST("/users", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.Store))                        //保存数据
+			Auth.GET("/users/:id", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.Show))                      //详情
+			Auth.GET("/users/:id/edit", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.Edit))                 //编辑页面
+			Auth.PUT("/users/:id", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.Update))                    //更新数据
+			Auth.DELETE("/users/:id", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.Destroy))                //删除数据
+			Auth.DELETE("/users/bulkDelete/:ids", egin.AutoVerifyHandler(RouterGroupApp.Admin.Users.BulkDelete)) //删除数据
 		}
 	}
 

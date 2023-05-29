@@ -1,0 +1,172 @@
+{
+  "type": "page",
+  "title": "用户管理",
+  "remark": null,
+  "name": "page-demo",
+  "body": [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "api": {
+        "method": "get",
+        "url": "/admin/users"
+      },
+      "columns": [
+        {
+          "name": "id",
+          "label": "ID",
+          "type": "text",
+          "sortable": true
+        },
+        {
+          "name": "username",
+          "label": "用户名",
+          "type": "text"
+        },
+        {
+          "type": "datetime",
+          "label": "创建时间",
+          "name": "created_at"
+        },
+        {
+          "type": "operation",
+          "label": "操作",
+          "buttons": [
+            {
+              "label": "编辑",
+              "type": "button",
+              "level": "link",
+              "actionType": "drawer",
+              "drawer": {
+                "position": "right",
+                "size": "lg",
+                "title": "编辑",
+                "body": {
+                  "type": "form",
+                  "initApi": "/admin/users/${id}/edit",
+                  "api": "put:/admin/users/${id}",
+                  "body": [
+                    {
+                      "name": "username",
+                      "label": "用户名",
+                      "type": "input-text"
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "password",
+                      "label": "密码"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "label": "查看",
+              "type": "button",
+              "actionType": "dialog",
+              "level": "link",
+              "dialog": {
+                "title": "查看详情",
+                "body": {
+                  "type": "form",
+                  "initApi": "get:/admin/users/${id}/edit",
+                  "body": [
+                    {
+                      "name": "id",
+                      "label": "ID",
+                      "type": "static"
+                    },
+                    {
+                      "name": "username",
+                      "label": "用户名",
+                      "type": "input-text"
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "password",
+                      "label": "密码"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "button",
+              "label": "删除",
+              "actionType": "ajax",
+              "level": "link",
+              "className": "text-danger",
+              "confirmText": "确定要删除？",
+              "api": "delete:/admin/users/${id}"
+            }
+          ]
+        }
+      ],
+      "bulkActions": [
+        {
+          "type": "button",
+          "level": "danger",
+          "label": "批量删除",
+          "confirmText": "确定要删除？",
+          "actionType": "ajax",
+          "api": "delete:/admin/users/bulkDelete/${ids|raw}"
+        }
+      ],
+      "itemActions": [],
+      "features": [
+        "create",
+        "filter",
+        "bulkDelete",
+        "update",
+        "view",
+        "delete"
+      ],
+      "filterColumnCount": 3,
+      "headerToolbar": [
+        {
+          "label": "新增",
+          "type": "button",
+          "level": "primary",
+          "actionType": "drawer",
+          "drawer": {
+            "position": "right",
+            "size": "lg",
+            "title": "新增",
+            "body": {
+              "type": "form",
+              "api": "post:/admin/users",
+              "body": [
+                {
+                  "name": "username",
+                  "label": "用户名",
+                  "type": "input-text"
+                },
+                {
+                  "type": "input-text",
+                  "name": "password",
+                  "label": "密码"
+                }
+              ]
+            }
+          }
+        },
+        "bulkActions"
+      ],
+      "id": "u:c3167575b83d",
+      "perPageAvailable": [
+        10
+      ],
+      "messages": {},
+      "filter": {
+        "title": "查询条件",
+        "body": [
+          {
+            "type": "input-text",
+            "name": "keywords",
+            "label": "关键字"
+          }
+        ]
+      }
+    }
+  ]
+}

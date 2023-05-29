@@ -1,78 +1,36 @@
 package Controllers
 
 import (
+	"errors"
 	"go-gin-amis/app/Http/Requests"
-	"go-gin-amis/app/Models"
-	"go-gin-amis/config"
+	"go-gin-amis/app/dal/model"
+	"go-gin-amis/app/serv"
 	"strconv"
 	"strings"
 
-	"github.com/duolabmeng6/goefun/edb"
-	"github.com/duolabmeng6/goefun/egin"
 	"github.com/gin-gonic/gin"
 )
 
 type ArticlesController struct {
-	ArticlesService *Models.ArticlesService
-	edb             edb.Mysql数据库操作类
+	文章操作 serv.E文章操作
 }
 
 func (b *ArticlesController) Init() {
-	b.ArticlesService = Models.NewArticlesService(config.DB)
-	b.edb = *edb.NewMysql数据库操作类()
-	b.edb.E连接数据库(config.E数据库连接字符串)
-
+	b.文章操作 = serv.S文章操作
 }
 
-func (b *ArticlesController) Index(c *gin.Context) {
-	var req Requests.ArticlesIndexRequest
-	if err := egin.Verify(c, &req); err != nil {
-		c.JSON(500, gin.H{
-			"messagex": err.Error(),
-		})
-		return
-	}
-	//query := "SELECT id,title,content,created_at,updated_at FROM articles" + edb.OrderBY(req.OrderBy, req.OrderDir, "title", "desc") + edb.LIMIT(req.Page, req.PerPage)
-
-	dialect := edb.NewMySQLQueryBuilder()
-	qb := dialect.From("articles").
-		Select("id", "title", "content", "created_at", "updated_at").
-		//Where("created_at", ">", "2020-01-01 00:00:00").
-		OrderBy(req.OrderBy, req.OrderDir).
-		Limit(int(req.Page), int(req.PerPage))
-	if req.Keywords != "" {
-		qb.Where("title", "like", "%"+req.Keywords+"%")
-	}
-	query, param := qb.ToSQL()
-	println(query, param)
-
-	result, err := b.edb.QueryRaw(query, param)
-
+func (b *ArticlesController) Index(c *gin.Context, req *Requests.ArticlesIndexRequest) (gin.H, error) {
+	articles, total, err := b.文章操作.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
 	if err != nil {
-		c.JSON(500, gin.H{
-			"message": err.Error(),
-		})
-		return
+		return nil, err
 	}
-	query2, param2 := qb.Count().ToSQL()
-	total, _ := b.edb.CountRaw(query2, param2)
-
-	c.JSON(200, gin.H{
-		"query": query,
-		"items": result,
+	if total == 0 {
+		return nil, errors.New("没有数据")
+	}
+	return gin.H{
+		"items": articles,
 		"total": total,
-	})
-	// articles, total, err := b.ArticlesService.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
-	// if err != nil {
-	// 	c.JSON(500, gin.H{
-	// 		"messagex": err.Error(),
-	// 	})
-	// 	return
-	// }
-	// c.JSON(200, gin.H{
-	// 	"items": articles,
-	// 	"total": total,
-	// })
+	}, nil
 }
 
 func (b *ArticlesController) Create(c *gin.Context) {
@@ -82,24 +40,23 @@ func (b *ArticlesController) Create(c *gin.Context) {
 }
 func (b *ArticlesController) Store(c *gin.Context, req *Requests.ArticlesStoreRequest) (gin.H, error) {
 	// 插入数据库
-	articleData := new(Models.Articles)
+	articleData := new(model.Article)
 	articleData.Title = req.Title
 	articleData.Content = req.Content
 
-	id, err := b.ArticlesService.Insert(articleData)
+	id, err := b.文章操作.Insert(articleData)
 	if err != nil {
 		return nil, err
 	}
-	article, err := b.ArticlesService.FindOne(id)
+	article, err := b.文章操作.FindOne(id)
 	if err != nil {
 		return nil, err
 	}
+
 	return gin.H{
-		"id":         article.Id,
-		"title":      article.Title,
-		"content":    article.Content,
-		"created_at": article.CreatedAt.Format("2006-01-02 15:04:05"),
-		"updated_at": article.CreatedAt.Format("2006-01-02 15:04:05"),
+		"status": 0,
+		"msg":    "",
+		"data":   article,
 	}, nil
 }
 
@@ -109,26 +66,20 @@ func (b *ArticlesController) Show(c *gin.Context) {
 	})
 }
 func (b *ArticlesController) Edit(c *gin.Context, req *Requests.ArticlesIdRequest) (gin.H, error) {
-	article, err := b.ArticlesService.FindOne(req.Id)
+	article, err := b.文章操作.FindOne(req.Id)
 	if err != nil {
 		return nil, err
 	}
 	return gin.H{
 		"status": 0,
 		"msg":    "",
-		"data": gin.H{
-			"id":         article.Id,
-			"title":      article.Title,
-			"content":    article.Content,
-			"created_at": article.CreatedAt.Format("2006-01-02 15:04:05"),
-			"updated_at": article.CreatedAt.Format("2006-01-02 15:04:05"),
-		},
+		"data":   article,
 	}, nil
 }
 func (b *ArticlesController) Update(c *gin.Context, req *Requests.ArticlesUpdateRequest) (gin.H, error) {
 
 	// 查询文章内容
-	article, err := b.ArticlesService.FindOne(req.Id)
+	article, err := b.文章操作.FindOne(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +88,7 @@ func (b *ArticlesController) Update(c *gin.Context, req *Requests.ArticlesUpdate
 	article.Content = req.Content
 
 	// 更新文章内容
-	err = b.ArticlesService.Update(article)
+	err = b.文章操作.Update(article)
 	if err != nil {
 		return nil, err
 	}
@@ -145,17 +96,11 @@ func (b *ArticlesController) Update(c *gin.Context, req *Requests.ArticlesUpdate
 	return gin.H{
 		"status": 0,
 		"msg":    "更新成功",
-		"data": gin.H{
-			"id":         article.Id,
-			"title":      article.Title,
-			"content":    article.Content,
-			"created_at": article.CreatedAt.Format("2006-01-02 15:04:05"),
-			"updated_at": article.CreatedAt.Format("2006-01-02 15:04:05"),
-		},
+		"data":   article,
 	}, nil
 }
 func (b *ArticlesController) Destroy(c *gin.Context, req *Requests.ArticlesIdRequest) (gin.H, error) {
-	err := b.ArticlesService.Delete(req.Id)
+	err := b.文章操作.Delete(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +119,7 @@ func (b *ArticlesController) BulkDelete(c *gin.Context, req *Requests.ArticlesId
 	for _, id := range idsArr {
 		// 删除
 		idint, _ := strconv.ParseInt(id, 10, 64)
-		err := b.ArticlesService.Delete(idint)
+		err := b.文章操作.Delete(idint)
 		if err != nil {
 			return nil, err
 		}

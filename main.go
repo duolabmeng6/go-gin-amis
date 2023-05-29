@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-gin-amis/config"
+	"github.com/duolabmeng6/goefun/egin/Middleware"
 	"go-gin-amis/routes"
 
 	"github.com/duolabmeng6/goefun/ecore"
@@ -12,7 +12,7 @@ import (
 func main() {
 	// 加载.env文件
 	ecore.E加载环境变量_从文件(".env")
-	config.InitDB()
+	//config.InitDB()
 
 	gin.SetMode(gin.DebugMode)
 
@@ -29,6 +29,7 @@ func main() {
 	r.LoadHTMLGlob("./resources/views/*")
 	//中间件
 	//r.Use(Middlewre.LoggerMiddleware())
+	r.Use(Middleware.CrossMiddleware())
 	//	//路由注册a
 	routes.Init(r)
 
