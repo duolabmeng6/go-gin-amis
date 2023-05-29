@@ -1,9 +1,8 @@
 package serv
 
 import (
-	"context"
 	"fmt"
-	"github.com/duolabmeng6/goefun/ecore"
+	"github.com/duolabmeng6/goefun/edb"
 	"go-gin-amis/app/dal"
 	"go-gin-amis/app/dal/WrapTime"
 	"go-gin-amis/app/dal/model"
@@ -12,17 +11,21 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-var S用户操作 = New用户操作(dal.DB.Debug())
+var S用户操作 = New用户操作(dal.Edb, dal.DB.Debug())
 
 type E用户操作 struct {
-	DB *gorm.DB
-	Q  *query.Query
+	DB    *gorm.DB
+	Q     *query.Query
+	edb   *edb.MySQLQueryBuilder
+	table string
 }
 
-func New用户操作(db *gorm.DB) E用户操作 {
+func New用户操作(edb *edb.MySQLQueryBuilder, db *gorm.DB) E用户操作 {
 	return E用户操作{
-		DB: db,
-		Q:  query.Use(db),
+		DB:    db,
+		Q:     query.Use(db),
+		edb:   edb,
+		table: "users",
 	}
 }
 func (c E用户操作) E查询用户(用户名 string) (*model.User, error) {
@@ -143,41 +146,43 @@ func (c E用户操作) E查询充值记录(用户 *model.User, 当前页数 int6
 		Scan(&outputs)
 	return outputs, err
 }
-func (c E用户操作) E查询用户列表(搜索关键字 string, 当前页数 int64, 每页显示多少条 int64, 排序字段 string, 排序方向 string) ([]*model.User, int64, error) {
-	var users []*model.User
-	u := c.Q.User.WithContext(context.Background())
-	if 搜索关键字 != "" {
-		u = u.Or(c.Q.User.Username.Like("%" + 搜索关键字 + "%"))
-		u = u.Or(c.Q.User.ID.Eq(ecore.E到整数(搜索关键字)))
+
+func (c E用户操作) Index(keywords string, perPage int64, page int64, orderBy string, orderDir string) ([]map[string]interface{}, int64, error) {
+	db := c.edb.From(c.table).
+		Select("*").
+		OrderBy(orderBy, orderDir).
+		Paginate(perPage, page)
+	if keywords != "" {
+		db = db.OrWhere("username", "like", "%"+keywords+"%").
+			OrWhere("id", "=", keywords)
 	}
-	if 排序字段 == "id" && 排序方向 == "desc" {
-		u = u.Order(c.Q.User.ID.Desc())
-	} else {
-		u = u.Order(c.Q.User.ID)
-	}
-	u = u.Offset(int((当前页数 - 1) * 每页显示多少条)).Limit(int(每页显示多少条))
+	articles, err := db.Get()
+	count, err := db.Count()
+	return articles, count, err
+}
 
-	err := u.Scan(&users)
-
-	count, err := u.Count()
-
-	return users, count, err
+// Insert
+func (c E用户操作) Insert(articles map[string]interface{}) (int64, error) {
+	id, err := c.edb.From(c.table).Insert(articles)
+	return id, err
 }
 
 // FindOne
-func (c *E用户操作) FindOne(id int64) (*model.User, error) {
-
-	user, err := c.Q.User.Where(c.Q.User.ID.Eq(id)).First()
-	return user, err
+func (c *E用户操作) FindOne(id int64) (map[string]interface{}, error) {
+	articles, err := c.edb.From(c.table).Where("id", "=", id).First()
+	return articles, err
 }
 
 // Update
-func (c *E用户操作) Update(articles *model.User) error {
-	return c.Q.User.Save(articles)
+func (c *E用户操作) Update(articles map[string]interface{}) error {
+	_, err := c.edb.From(c.table).
+		Where("id", "=", articles["id"]).
+		Update(articles)
+	return err
 }
 
 // Delete
 func (c *E用户操作) Delete(id int64) error {
-	result, _ := c.Q.User.Where(c.Q.User.ID.Eq(id)).Delete()
-	return result.Error
+	_, err := c.edb.From(c.table).Where("id", "=", id).Delete()
+	return err
 }

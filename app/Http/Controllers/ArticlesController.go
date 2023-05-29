@@ -2,8 +2,7 @@ package Controllers
 
 import (
 	"errors"
-	"go-gin-amis/app/Http/Requests"
-	"go-gin-amis/app/dal/model"
+	"github.com/duolabmeng6/goefun/egin"
 	"go-gin-amis/app/serv"
 	"strconv"
 	"strings"
@@ -19,7 +18,14 @@ func (b *ArticlesController) Init() {
 	b.文章操作 = serv.S文章操作
 }
 
-func (b *ArticlesController) Index(c *gin.Context, req *Requests.ArticlesIndexRequest) (gin.H, error) {
+func (b *ArticlesController) Index(c *gin.Context, req *struct {
+	Keywords string `i:"keywords"`
+	PerPage  int64  `i:"perPage" rule:"required" msg:"PerPage 必填"`
+	Page     int64  `i:"page" rule:"required" msg:"Page 必填"`
+	OrderBy  string `i:"orderBy" default:"id"`
+	OrderDir string `i:"orderDir" default:"desc"`
+}) (gin.H, error) {
+
 	articles, total, err := b.文章操作.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
 	if err != nil {
 		return nil, err
@@ -38,12 +44,8 @@ func (b *ArticlesController) Create(c *gin.Context) {
 		"message": "create",
 	})
 }
-func (b *ArticlesController) Store(c *gin.Context, req *Requests.ArticlesStoreRequest) (gin.H, error) {
-	// 插入数据库
-	articleData := new(model.Article)
-	articleData.Title = req.Title
-	articleData.Content = req.Content
-
+func (b *ArticlesController) Store(c *gin.Context) (gin.H, error) {
+	articleData := egin.IAll(c)
 	id, err := b.文章操作.Insert(articleData)
 	if err != nil {
 		return nil, err
@@ -52,7 +54,6 @@ func (b *ArticlesController) Store(c *gin.Context, req *Requests.ArticlesStoreRe
 	if err != nil {
 		return nil, err
 	}
-
 	return gin.H{
 		"status": 0,
 		"msg":    "",
@@ -65,7 +66,9 @@ func (b *ArticlesController) Show(c *gin.Context) {
 		"message": "show",
 	})
 }
-func (b *ArticlesController) Edit(c *gin.Context, req *Requests.ArticlesIdRequest) (gin.H, error) {
+func (b *ArticlesController) Edit(c *gin.Context, req *struct {
+	Id int64 `i:"id" rule:"required" msg:"id 必填"`
+}) (gin.H, error) {
 	article, err := b.文章操作.FindOne(req.Id)
 	if err != nil {
 		return nil, err
@@ -76,30 +79,22 @@ func (b *ArticlesController) Edit(c *gin.Context, req *Requests.ArticlesIdReques
 		"data":   article,
 	}, nil
 }
-func (b *ArticlesController) Update(c *gin.Context, req *Requests.ArticlesUpdateRequest) (gin.H, error) {
-
-	// 查询文章内容
-	article, err := b.文章操作.FindOne(req.Id)
+func (b *ArticlesController) Update(c *gin.Context) (gin.H, error) {
+	articleData := egin.IAll(c)
+	err := b.文章操作.Update(articleData)
 	if err != nil {
 		return nil, err
 	}
-
-	article.Title = req.Title
-	article.Content = req.Content
-
-	// 更新文章内容
-	err = b.文章操作.Update(article)
-	if err != nil {
-		return nil, err
-	}
-
 	return gin.H{
 		"status": 0,
 		"msg":    "更新成功",
-		"data":   article,
+		//"data":   article,
 	}, nil
 }
-func (b *ArticlesController) Destroy(c *gin.Context, req *Requests.ArticlesIdRequest) (gin.H, error) {
+func (b *ArticlesController) Destroy(c *gin.Context, req *struct {
+	Id int64 `i:"id" rule:"required" msg:"id 必填"`
+}) (gin.H, error) {
+
 	err := b.文章操作.Delete(req.Id)
 	if err != nil {
 		return nil, err
@@ -111,7 +106,10 @@ func (b *ArticlesController) Destroy(c *gin.Context, req *Requests.ArticlesIdReq
 	}, nil
 }
 
-func (b *ArticlesController) BulkDelete(c *gin.Context, req *Requests.ArticlesIdsRequest) (gin.H, error) {
+func (b *ArticlesController) BulkDelete(c *gin.Context, req *struct {
+	Ids string `i:"ids" rule:"required" msg:"ids 必填"`
+}) (gin.H, error) {
+
 	// 批量删除 ids 参数类似于 1,2,3 需要分割为,然后一个一个删除
 	// 分割 ids
 	idsArr := strings.Split(req.Ids, ",")

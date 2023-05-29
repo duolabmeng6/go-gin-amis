@@ -2,8 +2,7 @@ package Controllers
 
 import (
 	"errors"
-	"go-gin-amis/app/Http/Requests"
-	"go-gin-amis/app/dal/model"
+	"github.com/duolabmeng6/goefun/egin"
 	"go-gin-amis/app/serv"
 	"strconv"
 	"strings"
@@ -19,8 +18,14 @@ func (b *UsersController) Init() {
 	b.用户操作 = serv.S用户操作
 }
 
-func (b *UsersController) Index(c *gin.Context, req *Requests.UsersIndexRequest) (gin.H, error) {
-	articles, total, err := b.用户操作.E查询用户列表(req.Keywords, req.Page, req.PerPage, req.OrderBy, req.OrderDir)
+func (b *UsersController) Index(c *gin.Context, req *struct {
+	Keywords string `i:"keywords"`
+	PerPage  int64  `i:"perPage" rule:"required" msg:"PerPage 必填"`
+	Page     int64  `i:"page" rule:"required" msg:"Page 必填"`
+	OrderBy  string `i:"orderBy" default:"id"`
+	OrderDir string `i:"orderDir" default:"desc"`
+}) (gin.H, error) {
+	articles, total, err := b.用户操作.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
 	if err != nil {
 		return nil, err
 	}
@@ -38,21 +43,21 @@ func (b *UsersController) Create(c *gin.Context) {
 		"message": "create",
 	})
 }
-func (b *UsersController) Store(c *gin.Context, req *Requests.UsersStoreRequest) (gin.H, error) {
+func (b *UsersController) Store(c *gin.Context) (gin.H, error) {
 	// 插入数据库
-	articleData := new(model.User)
-	articleData.Username = req.Username
-	articleData.Password = req.Password
-
-	err := b.用户操作.E创建用户(articleData)
+	req := egin.IAll(c)
+	id, err := b.用户操作.Insert(req)
 	if err != nil {
 		return nil, err
 	}
-
+	article, err := b.用户操作.FindOne(id)
+	if err != nil {
+		return nil, err
+	}
 	return gin.H{
 		"status": 0,
 		"msg":    "",
-		"data":   articleData,
+		"data":   article,
 	}, nil
 }
 
@@ -61,7 +66,9 @@ func (b *UsersController) Show(c *gin.Context) {
 		"message": "show",
 	})
 }
-func (b *UsersController) Edit(c *gin.Context, req *Requests.UsersIdRequest) (gin.H, error) {
+func (b *UsersController) Edit(c *gin.Context, req *struct {
+	Id int64 `i:"id" rule:"required" msg:"id 必填"`
+}) (gin.H, error) {
 	article, err := b.用户操作.FindOne(req.Id)
 	if err != nil {
 		return nil, err
@@ -72,30 +79,26 @@ func (b *UsersController) Edit(c *gin.Context, req *Requests.UsersIdRequest) (gi
 		"data":   article,
 	}, nil
 }
-func (b *UsersController) Update(c *gin.Context, req *Requests.UsersUpdateRequest) (gin.H, error) {
-
-	// 查询文章内容
-	article, err := b.用户操作.FindOne(req.Id)
+func (b *UsersController) Update(c *gin.Context) (gin.H, error) {
+	req := egin.IAll(c)
+	err := b.用户操作.Update(req)
 	if err != nil {
 		return nil, err
 	}
-
-	article.Username = req.Username
-	article.Password = req.Password
-
-	// 更新文章内容
-	err = b.用户操作.Update(article)
+	article, err := b.用户操作.FindOne(req["id"].(int64))
 	if err != nil {
 		return nil, err
 	}
-
 	return gin.H{
 		"status": 0,
 		"msg":    "更新成功",
 		"data":   article,
 	}, nil
 }
-func (b *UsersController) Destroy(c *gin.Context, req *Requests.UsersIdRequest) (gin.H, error) {
+func (b *UsersController) Destroy(c *gin.Context, req *struct {
+	Id int64 `i:"id" rule:"required" msg:"id 必填"`
+}) (gin.H, error) {
+
 	err := b.用户操作.Delete(req.Id)
 	if err != nil {
 		return nil, err
@@ -107,7 +110,10 @@ func (b *UsersController) Destroy(c *gin.Context, req *Requests.UsersIdRequest) 
 	}, nil
 }
 
-func (b *UsersController) BulkDelete(c *gin.Context, req *Requests.UsersIdsRequest) (gin.H, error) {
+func (b *UsersController) BulkDelete(c *gin.Context, req *struct {
+	Ids string `i:"ids" rule:"required" msg:"ids 必填"`
+}) (gin.H, error) {
+
 	// 批量删除 ids 参数类似于 1,2,3 需要分割为,然后一个一个删除
 	// 分割 ids
 	idsArr := strings.Split(req.Ids, ",")
