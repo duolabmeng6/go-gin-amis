@@ -10,15 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type {{ .TableName }}Controller struct {
-	{{ .TableName }} serv.E{{ .TableName }}
+type UsersController struct {
+	Users serv.EUsers
 }
 
-func (b *{{ .TableName }}Controller) Init() {
-	b.{{ .TableName }} = serv.S{{ .TableName }}
+func (b *UsersController) Init() {
+	b.Users = serv.SUsers
 }
 
-func (b *{{ .TableName }}Controller) Index(c *gin.Context, req *struct {
+func (b *UsersController) Index(c *gin.Context, req *struct {
 	Keywords string `i:"keywords"`
 	PerPage  int64  `i:"perPage" rule:"required" msg:"PerPage 必填"`
 	Page     int64  `i:"page" rule:"required" msg:"Page 必填"`
@@ -26,7 +26,7 @@ func (b *{{ .TableName }}Controller) Index(c *gin.Context, req *struct {
 	OrderDir string `i:"orderDir" default:"desc"`
 }) (gin.H, error) {
 
-	articles, total, err := b.{{ .TableName }}.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
+	articles, total, err := b.Users.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
 	if err != nil {
 		return nil, err
 	}
@@ -39,18 +39,18 @@ func (b *{{ .TableName }}Controller) Index(c *gin.Context, req *struct {
 	}, nil
 }
 
-func (b *{{ .TableName }}Controller) Create(c *gin.Context) {
+func (b *UsersController) Create(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "create",
 	})
 }
-func (b *{{ .TableName }}Controller) Store(c *gin.Context) (gin.H, error) {
+func (b *UsersController) Store(c *gin.Context) (gin.H, error) {
 	articleData := egin.IAll(c)
-	id, err := b.{{ .TableName }}.Insert(articleData)
+	id, err := b.Users.Insert(articleData)
 	if err != nil {
 		return nil, err
 	}
-	article, err := b.{{ .TableName }}.FindOne(id)
+	article, err := b.Users.FindOne(id)
 	if err != nil {
 		return nil, err
 	}
@@ -61,15 +61,15 @@ func (b *{{ .TableName }}Controller) Store(c *gin.Context) (gin.H, error) {
 	}, nil
 }
 
-func (b *{{ .TableName }}Controller) Show(c *gin.Context) {
+func (b *UsersController) Show(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "show",
 	})
 }
-func (b *{{ .TableName }}Controller) Edit(c *gin.Context, req *struct {
+func (b *UsersController) Edit(c *gin.Context, req *struct {
 	Id int64 `i:"id" rule:"required" msg:"id 必填"`
 }) (gin.H, error) {
-	article, err := b.{{ .TableName }}.FindOne(req.Id)
+	article, err := b.Users.FindOne(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -79,9 +79,9 @@ func (b *{{ .TableName }}Controller) Edit(c *gin.Context, req *struct {
 		"data":   article,
 	}, nil
 }
-func (b *{{ .TableName }}Controller) Update(c *gin.Context) (gin.H, error) {
+func (b *UsersController) Update(c *gin.Context) (gin.H, error) {
 	articleData := egin.IAll(c)
-	err := b.{{ .TableName }}.Update(articleData)
+	err := b.Users.Update(articleData)
 	if err != nil {
 		return nil, err
 	}
@@ -91,11 +91,11 @@ func (b *{{ .TableName }}Controller) Update(c *gin.Context) (gin.H, error) {
 		//"data":   article,
 	}, nil
 }
-func (b *{{ .TableName }}Controller) Destroy(c *gin.Context, req *struct {
+func (b *UsersController) Destroy(c *gin.Context, req *struct {
 	Id int64 `i:"id" rule:"required" msg:"id 必填"`
 }) (gin.H, error) {
 
-	err := b.{{ .TableName }}.Delete(req.Id)
+	err := b.Users.Delete(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func (b *{{ .TableName }}Controller) Destroy(c *gin.Context, req *struct {
 	}, nil
 }
 
-func (b *{{ .TableName }}Controller) BulkDelete(c *gin.Context, req *struct {
+func (b *UsersController) BulkDelete(c *gin.Context, req *struct {
 	Ids string `i:"ids" rule:"required" msg:"ids 必填"`
 }) (gin.H, error) {
 
@@ -117,7 +117,7 @@ func (b *{{ .TableName }}Controller) BulkDelete(c *gin.Context, req *struct {
 	for _, id := range idsArr {
 		// 删除
 		idint, _ := strconv.ParseInt(id, 10, 64)
-		err := b.{{ .TableName }}.Delete(idint)
+		err := b.Users.Delete(idint)
 		if err != nil {
 			return nil, err
 		}

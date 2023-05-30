@@ -4,21 +4,21 @@ import (
 	"github.com/duolabmeng6/goefun/edb"
 )
 
-var S{{ .TableName }}Serv = New{{ .TableName }}Serv(dal.Edb)
+var SUsersServ = NewUsersServ(dal.Edb)
 
-type E{{ .TableName }}Serv struct {
+type EUsersServ struct {
 	edb   *edb.MySQLQueryBuilder
 	table string
 }
 
-func New{{ .TableName }}Serv(edb *edb.MySQLQueryBuilder) E{{ .TableName }}Serv {
-	return E{{ .TableName }}Serv{
+func NewUsersServ(edb *edb.MySQLQueryBuilder) EUsersServ {
+	return EUsersServ{
 		edb:   edb,
-		table: "{{ .tableName }}",
+		table: "users",
 	}
 }
 
-func (c E{{ .TableName }}Serv) Index(keywords string, perPage int64, page int64, orderBy string, orderDir string) ([]map[string]interface{}, int64, error) {
+func (c EUsersServ) Index(keywords string, perPage int64, page int64, orderBy string, orderDir string) ([]map[string]interface{}, int64, error) {
 	db := c.edb.From(c.table).
 		Select("*").
 		OrderBy(orderBy, orderDir).
@@ -32,19 +32,19 @@ func (c E{{ .TableName }}Serv) Index(keywords string, perPage int64, page int64,
 }
 
 // Insert
-func (c E{{ .TableName }}Serv) Insert(info map[string]interface{}) (int64, error) {
+func (c EUsersServ) Insert(info map[string]interface{}) (int64, error) {
 	id, err := c.edb.From(c.table).Insert(info)
 	return id, err
 }
 
 // FindOne
-func (c *E{{ .TableName }}Serv) FindOne(id int64) (map[string]interface{}, error) {
+func (c *EUsersServ) FindOne(id int64) (map[string]interface{}, error) {
 	info, err := c.edb.From(c.table).Where("id", "=", id).First()
 	return info, err
 }
 
 // Update
-func (c *E{{ .TableName }}Serv) Update(info map[string]interface{}) error {
+func (c *EUsersServ) Update(info map[string]interface{}) error {
 	_, err := c.edb.From(c.table).
 		Where("id", "=", info["id"]).
 		Update(info)
@@ -52,7 +52,7 @@ func (c *E{{ .TableName }}Serv) Update(info map[string]interface{}) error {
 }
 
 // Delete
-func (c *E{{ .TableName }}Serv) Delete(id int64) error {
+func (c *EUsersServ) Delete(id int64) error {
 	_, err := c.edb.From(c.table).Where("id", "=", id).Delete()
 	return err
 }

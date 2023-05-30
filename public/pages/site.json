@@ -30,6 +30,16 @@
       {
         "children": [
           {
+            "label": "用户管理auto",
+            "url": "/pages/usersPage",
+            "icon": "fa fa-cube",
+            "schemaApi": "get:/pages/usersPage.json"
+          }
+        ]
+      },
+      {
+        "children": [
+          {
             "label": "文章管理",
             "url": "/pages/articles",
             "icon": "fa fa-list",

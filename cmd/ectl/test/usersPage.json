@@ -1,6 +1,6 @@
 {
   "type": "page",
-  "title": "{{ .TableName }}管理",
+  "title": "文章管理",
   "remark": null,
   "name": "page-demo",
   "body": [
@@ -9,10 +9,46 @@
       "syncLocation": false,
       "api": {
         "method": "get",
-        "url": "/admin/{{ .tableName }}"
+        "url": "/admin/articles"
       },
       "columns": [
-        {{.TableCol}},{
+        
+  {
+    "name": "password",
+    "label": "password",
+    "type": "text"
+  },
+  {
+    "name": "integral",
+    "label": "integral",
+    "type": "text"
+  },
+  {
+    "name": "created_at",
+    "label": "created_at",
+    "type": "text"
+  },
+  {
+    "name": "updated_at",
+    "label": "updated_at",
+    "type": "text"
+  },
+  {
+    "name": "deleted_at",
+    "label": "deleted_at",
+    "type": "text"
+  },
+  {
+    "name": "id",
+    "label": "id",
+    "type": "text"
+  },
+  {
+    "name": "username",
+    "label": "username",
+    "type": "text"
+  }
+,{
           "type": "operation",
           "label": "操作",
           "buttons": [
@@ -27,11 +63,19 @@
                 "title": "编辑",
                 "body": {
                   "type": "form",
-                  "initApi": "/admin/{{ .tableName }}/${id}/edit",
-                  "api": "put:/admin/{{ .tableName }}/${id}",
+                  "initApi": "/admin/articles/${id}/edit",
+                  "api": "put:/admin/articles/${id}",
                   "body": [
-                    {{ .ColEdit }}
-
+                    {
+                      "name": "title",
+                      "label": "标题",
+                      "type": "input-text"
+                    },
+                    {
+                      "type": "input-rich-text",
+                      "name": "content",
+                      "label": "内容"
+                    }
                   ]
                 }
               }
@@ -45,9 +89,23 @@
                 "title": "查看详情",
                 "body": {
                   "type": "form",
-                  "initApi": "get:/admin/{{ .tableName }}/${id}/edit",
+                  "initApi": "get:/admin/articles/${id}/edit",
                   "body": [
-                    {{ .ColLook }}
+                    {
+                      "name": "id",
+                      "label": "ID",
+                      "type": "static"
+                    },
+                    {
+                      "name": "title",
+                      "label": "标题",
+                      "type": "static"
+                    },
+                    {
+                      "type": "input-rich-text",
+                      "name": "content",
+                      "label": "内容"
+                    }
                   ]
                 }
               }
@@ -59,7 +117,7 @@
               "level": "link",
               "className": "text-danger",
               "confirmText": "确定要删除？",
-              "api": "delete:/admin/{{ .tableName }}/${id}"
+              "api": "delete:/admin/articles/${id}"
             }
           ]
         }
@@ -71,7 +129,7 @@
           "label": "批量删除",
           "confirmText": "确定要删除？",
           "actionType": "ajax",
-          "api": "delete:/admin/{{ .tableName }}/bulkDelete/${ids|raw}"
+          "api": "delete:/admin/articles/bulkDelete/${ids|raw}"
         }
       ],
       "itemActions": [],
@@ -96,10 +154,18 @@
             "title": "新增",
             "body": {
               "type": "form",
-              "api": "post:/admin/{{ .tableName }}",
+              "api": "post:/admin/articles",
               "body": [
-                {{ .ColAdd }}
-
+                {
+                  "type": "input-text",
+                  "name": "title",
+                  "label": "标题"
+                },
+                {
+                  "type": "input-rich-text",
+                  "name": "content",
+                  "label": "内容"
+                }
               ]
             }
           }
