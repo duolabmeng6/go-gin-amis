@@ -1,4 +1,4 @@
-module github.com/spf13/myapp
+module github.com/duolabmeng6/ecli
 
 go 1.20
 replace github.com/duolabmeng6/goefun => /Users/chensuilong/Desktop/goproject/goefun

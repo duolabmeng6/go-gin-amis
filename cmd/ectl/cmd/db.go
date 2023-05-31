@@ -53,13 +53,7 @@ var dbCmd = &cobra.Command{
 		//            "comment":  "创建时间",
 		//            "dataType": "timestamp",
 		//        },
-		//遍历 字段名称 字段类型 字段备注
-		type Column struct {
-			Name     string `json:"name"`
-			Label    string `json:"label"`
-			Type     string `json:"type"`
-			Sortable bool   `json:"sortable,omitempty"`
-		}
+
 		columns := make([]Column, 0)
 		columnsLook := make([]Column, 0)
 		columnsEdit := make([]Column, 0)

@@ -1,0 +1,155 @@
+{
+  "type": "page",
+  "title": "代码生成器",
+  "body": [
+    {
+      "type": "form",
+      "title": "表单",
+      "body": [
+        {
+          "label": "表名",
+          "type": "input-text",
+          "name": "tableName",
+          "id": "u:f7fc98a6c980"
+        },
+        {
+          "label": "翻译表名",
+          "type": "input-text",
+          "name": "tableTranslate",
+          "id": "u:e69de6b5dbd7"
+        },
+
+        {
+          "label": "控制器",
+          "name": "ctlPath",
+          "type": "input-text",
+          "id": "u:f57abffc7d5f"
+        },
+        {
+          "label": "数据仓库",
+          "name": "dataPath",
+          "type": "input-text",
+          "id": "u:a37161ee2ea9"
+        },
+        {
+          "label": "CURD页面",
+          "name": "curdPath",
+          "type": "input-text",
+          "id": "u:a37161ee2ea0"
+        },
+        {
+          "label": "字段数据",
+          "name": "tableCol",
+          "type": "input-text",
+          "id": "u:a37161ee2ea9"
+        },
+        {
+          "type": "input-table",
+          "name": "tableCol",
+          "label": "表格",
+          "columns": [
+            {
+              "label": "字段名",
+              "name": "name",
+              "quickEdit": {
+                "type": "input-text",
+                "name": "name",
+                "id": "u:458ec20ae866"
+              },
+              "id": "u:73c57aeff5c6"
+            },
+            {
+              "label": "翻译",
+              "name": "translate",
+              "quickEdit": {
+                "type": "input-text",
+                "name": "translate",
+                "id": "u:b6282cfd3d87"
+              },
+              "id": "u:04f18ba138cb"
+            },
+            {
+              "type": "select",
+              "label": "表单控件类型",
+              "name": "type",
+              "options": [
+                {
+                  "label": "input-text 输入框",
+                  "value": "input-text"
+                },
+                {
+                  "label": "textarea 多行文本",
+                  "value": "textarea"
+                },
+                {
+                  "label": "input-number 多行文本",
+                  "value": "input-number"
+                },
+                {
+                  "label": "input-datetime 时间输入框",
+                  "value": "input-datetime"
+                },
+                {
+                  "label": "switch 开关",
+                  "value": "switch"
+                }
+              ],
+              "id": "u:8d5fed77942b"
+            },
+            {
+              "label": "字段类型",
+              "name": "dataType",
+              "quickEdit": false,
+              "id": "u:59154af42e3c",
+              "placeholder": "-"
+            }
+          ],
+          "addable": true,
+          "footerAddBtn": {
+            "label": "新增",
+            "icon": "fa fa-plus",
+            "id": "u:52ed600e6bae"
+          },
+          "strictMode": true,
+          "id": "u:7b31627ea242",
+          "minLength": 0,
+          "editable": true,
+          "removable": true,
+          "showIndex": false,
+          "needConfirm": false,
+          "copyable": false,
+          "canAccessSuperData": true,
+          "static": false
+        }
+      ],
+      "api": {
+        "url": "/auto/created",
+        "method": "post"
+      },
+      "id": "u:3b8501f51979",
+      "onEvent": {
+        "inited": {
+          "weight": 0,
+          "actions": [
+          ]
+        }
+      },
+      "initApi": {
+        "url": "/auto/get/users",
+        "method": "get",
+        "requestAdaptor": "",
+        "adaptor": "",
+        "messages": {
+        },
+        "dataType": "json"
+      }
+    }
+  ],
+  "id": "u:b4ee737fa2d3",
+  "asideResizor": false,
+  "pullRefresh": {
+    "disabled": true
+  },
+  "aside": [
+  ]
+}

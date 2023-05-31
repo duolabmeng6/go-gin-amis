@@ -20,6 +20,7 @@ type AdminRouter struct {
 	Articles  Controllers.ArticlesController
 	Users     Controllers.UsersController
 	AmisPages Controllers.AmisPagesController
+	Auto      Controllers.AutoController
 }
 
 var RouterGroupApp = new(RouterGroup)
@@ -27,6 +28,7 @@ var RouterGroupApp = new(RouterGroup)
 func Init(Router *gin.Engine) {
 	RouterGroupApp.Admin.Articles.Init()
 	RouterGroupApp.Admin.Users.Init()
+	RouterGroupApp.Admin.Auto.Init()
 
 	Router.GET("/", RouterGroupApp.Web.Home.Index)
 	{
@@ -35,6 +37,10 @@ func Init(Router *gin.Engine) {
 		Router.GET("/admin/logout", RouterGroupApp.Admin.Login.GetLogout)
 
 		Router.GET("/page/:id", RouterGroupApp.Admin.AmisPages.Show) //详情
+
+		Router.GET("/auto/get/users", RouterGroupApp.Admin.Auto.Get)
+		Router.POST("/auto/created", egin.AutoVerifyHandler(RouterGroupApp.Admin.Auto.Store))
+		Router.GET("/auto/created", RouterGroupApp.Admin.Auto.Store)
 
 		Auth := Router.Group("/admin")
 		// Auth := Router.Group("/admin").Use(Middleware.JwtVerifyMiddleware("/admin/login"))
