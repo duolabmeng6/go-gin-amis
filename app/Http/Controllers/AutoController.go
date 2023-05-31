@@ -2,7 +2,6 @@ package Controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/duolabmeng6/ecli/cmd"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/text/cases"
@@ -111,7 +110,7 @@ func (b *AutoController) Store(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, gin.H{
 			"status": 1,
-			"msg":    fmt.Println("渲染模板并输出文件时发生错误:", err),
+			"msg":    "渲染模板并输出文件时发生错误:" + err.Error(),
 		})
 		return
 	}
@@ -121,7 +120,7 @@ func (b *AutoController) Store(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, gin.H{
 			"status": 1,
-			"msg":    fmt.Println("渲染模板并输出文件时发生错误:", err),
+			"msg":    "渲染模板并输出文件时发生错误:" + err.Error(),
 		})
 		return
 	}
@@ -131,7 +130,7 @@ func (b *AutoController) Store(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, gin.H{
 			"status": 1,
-			"msg":    fmt.Println("渲染模板并输出文件时发生错误:", err),
+			"msg":    "渲染模板并输出文件时发生错误:" + err.Error(),
 		})
 		return
 	}

@@ -32,7 +32,7 @@
           "id": "u:a37161ee2ea9"
         },
         {
-          "label": "CURD页面",
+          "label": "CURD页面JSON",
           "name": "curdPath",
           "type": "input-text",
           "id": "u:a37161ee2ea0"
