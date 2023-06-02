@@ -5,21 +5,21 @@ import (
 	"go-gin-amis/app/dal"
 )
 
-var SUsersServ = NewUsersServ(dal.Edb)
+var SArticlesServ = NewArticlesServ(dal.Edb)
 
-type EUsersServ struct {
+type EArticlesServ struct {
 	edb   *edb.MySQLQueryBuilder
 	table string
 }
 
-func NewUsersServ(edb *edb.MySQLQueryBuilder) EUsersServ {
-	return EUsersServ{
+func NewArticlesServ(edb *edb.MySQLQueryBuilder) EArticlesServ {
+	return EArticlesServ{
 		edb:   edb,
-		table: "users",
+		table: "articles",
 	}
 }
 
-func (c EUsersServ) Index(keywords string, perPage int64, page int64, orderBy string, orderDir string) ([]map[string]interface{}, int64, error) {
+func (c EArticlesServ) Index(keywords string, perPage int64, page int64, orderBy string, orderDir string) ([]map[string]interface{}, int64, error) {
 	db := c.edb.From(c.table).
 		Select("*").
 		OrderBy(orderBy, orderDir).
@@ -33,19 +33,19 @@ func (c EUsersServ) Index(keywords string, perPage int64, page int64, orderBy st
 }
 
 // Insert
-func (c EUsersServ) Insert(info map[string]interface{}) (int64, error) {
+func (c EArticlesServ) Insert(info map[string]interface{}) (int64, error) {
 	id, err := c.edb.From(c.table).Insert(info)
 	return id, err
 }
 
 // FindOne
-func (c *EUsersServ) FindOne(id int64) (map[string]interface{}, error) {
+func (c *EArticlesServ) FindOne(id int64) (map[string]interface{}, error) {
 	info, err := c.edb.From(c.table).Where("id", "=", id).First()
 	return info, err
 }
 
 // Update
-func (c *EUsersServ) Update(info map[string]interface{}) error {
+func (c *EArticlesServ) Update(info map[string]interface{}) error {
 	_, err := c.edb.From(c.table).
 		Where("id", "=", info["id"]).
 		Update(info)
@@ -53,7 +53,7 @@ func (c *EUsersServ) Update(info map[string]interface{}) error {
 }
 
 // Delete
-func (c *EUsersServ) Delete(id int64) error {
+func (c *EArticlesServ) Delete(id int64) error {
 	_, err := c.edb.From(c.table).Where("id", "=", id).Delete()
 	return err
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/duolabmeng6/ecli/cmd"
+	"github.com/duolabmeng6/goefun/ecore"
 	"github.com/duolabmeng6/goefun/edb"
 	"github.com/duolabmeng6/goefun/egin"
 	"github.com/gin-gonic/gin"
@@ -85,7 +86,11 @@ func (b *AutoController) Get(c *gin.Context) {
 			"dataType":  v["dataType"],
 		})
 	}
-	RootPath := "/Users/chensuilong/Desktop/goproject/go-gin-amis/"
+	//RootPath := "/Users/chensuilong/Desktop/goproject/go-gin-amis/"
+	RootPath := ecore.E取运行源文件路径()
+	RootPath = ecore.E文件取父目录(RootPath)
+	RootPath = ecore.E文件取父目录(RootPath)
+	RootPath = ecore.E文件取父目录(RootPath)
 
 	c.JSON(200, gin.H{
 		"status": 0,
@@ -163,7 +168,12 @@ func (b *AutoController) Store(c *gin.Context) {
 		"ColEdit":   ColEdit,
 		"ColAdd":    ColAdd,
 	}
-	tmplFilePath := "/Users/chensuilong/Desktop/goproject/go-gin-amis/cmd/ectl/tpl/amis-curd.json"
+
+	RootPath := ecore.E取运行源文件路径()
+	RootPath = ecore.E文件取父目录(RootPath)
+	RootPath = ecore.E文件取父目录(RootPath)
+	RootPath = ecore.E文件取父目录(RootPath)
+	tmplFilePath := RootPath + "/cmd/ectl/tpl/amis-curd.json"
 	err := cmd.RenderTemplateToFile(tmplFilePath, data, req.CurdPath)
 	if err != nil {
 		c.JSON(200, gin.H{
@@ -173,7 +183,7 @@ func (b *AutoController) Store(c *gin.Context) {
 		return
 	}
 
-	tmplFilePath = "/Users/chensuilong/Desktop/goproject/go-gin-amis/cmd/ectl/tpl/amis操作类.go"
+	tmplFilePath = RootPath + "/cmd/ectl/tpl/amis操作类.go"
 	err = cmd.RenderTemplateToFile(tmplFilePath, data, req.DataPath)
 	if err != nil {
 		c.JSON(200, gin.H{
@@ -183,7 +193,7 @@ func (b *AutoController) Store(c *gin.Context) {
 		return
 	}
 
-	tmplFilePath = "/Users/chensuilong/Desktop/goproject/go-gin-amis/cmd/ectl/tpl/amisController.go"
+	tmplFilePath = RootPath + "/cmd/ectl/tpl/amisController.go"
 	err = cmd.RenderTemplateToFile(tmplFilePath, data, req.CtlPath)
 	if err != nil {
 		c.JSON(200, gin.H{

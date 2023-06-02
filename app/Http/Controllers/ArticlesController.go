@@ -11,11 +11,11 @@ import (
 )
 
 type ArticlesController struct {
-	文章操作 serv.E文章操作
+	Articles serv.EArticlesServ
 }
 
 func (b *ArticlesController) Init() {
-	b.文章操作 = serv.S文章操作
+	b.Articles = serv.SArticlesServ
 }
 
 func (b *ArticlesController) Index(c *gin.Context, req *struct {
@@ -26,7 +26,7 @@ func (b *ArticlesController) Index(c *gin.Context, req *struct {
 	OrderDir string `i:"orderDir" default:"desc"`
 }) (gin.H, error) {
 
-	articles, total, err := b.文章操作.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
+	articles, total, err := b.Articles.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
 	if err != nil {
 		return nil, err
 	}
@@ -46,11 +46,11 @@ func (b *ArticlesController) Create(c *gin.Context) {
 }
 func (b *ArticlesController) Store(c *gin.Context) (gin.H, error) {
 	articleData := egin.IAll(c)
-	id, err := b.文章操作.Insert(articleData)
+	id, err := b.Articles.Insert(articleData)
 	if err != nil {
 		return nil, err
 	}
-	article, err := b.文章操作.FindOne(id)
+	article, err := b.Articles.FindOne(id)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (b *ArticlesController) Show(c *gin.Context) {
 func (b *ArticlesController) Edit(c *gin.Context, req *struct {
 	Id int64 `i:"id" rule:"required" msg:"id 必填"`
 }) (gin.H, error) {
-	article, err := b.文章操作.FindOne(req.Id)
+	article, err := b.Articles.FindOne(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (b *ArticlesController) Edit(c *gin.Context, req *struct {
 }
 func (b *ArticlesController) Update(c *gin.Context) (gin.H, error) {
 	articleData := egin.IAll(c)
-	err := b.文章操作.Update(articleData)
+	err := b.Articles.Update(articleData)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (b *ArticlesController) Destroy(c *gin.Context, req *struct {
 	Id int64 `i:"id" rule:"required" msg:"id 必填"`
 }) (gin.H, error) {
 
-	err := b.文章操作.Delete(req.Id)
+	err := b.Articles.Delete(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ func (b *ArticlesController) BulkDelete(c *gin.Context, req *struct {
 	for _, id := range idsArr {
 		// 删除
 		idint, _ := strconv.ParseInt(id, 10, 64)
-		err := b.文章操作.Delete(idint)
+		err := b.Articles.Delete(idint)
 		if err != nil {
 			return nil, err
 		}

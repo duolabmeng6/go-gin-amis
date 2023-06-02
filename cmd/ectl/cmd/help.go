@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"github.com/duolabmeng6/goefun/ecore"
 	"os"
 	"text/template"
 )
@@ -48,23 +46,26 @@ func RenderTemplateToFile(tmplFilePath string, data H, outputFilePath string) er
 // E常见英文翻译函数
 // 比如 users 用户 articles 文章
 func E常见英文翻译函数(englishName string) string {
-	//读入当前目录下文件 翻译内容.json
-	//读取文件内容
-	文件内容 := ecore.E读入文件("/Users/chensuilong/Desktop/goproject/go-gin-amis/cmd/ectl/cmd/翻译内容.json")
-	var data [][]string
-	err := json.Unmarshal(文件内容, &data)
-	if err != nil {
-		fmt.Println(err)
-		return englishName
+	kv := map[string]string{
+		"users":       "用户",
+		"roles":       "角色",
+		"permissions": "权限",
+		"menus":       "菜单",
+		"logs":        "日志",
+		"settings":    "设置",
+		"articles":    "文章",
+		"created_at":  "创建时间",
+		"updated_at":  "更新时间",
+		"deleted_at":  "删除时间",
+		"username":    "用户名",
+		"password":    "密码",
+		"integral":    "积分",
+		"content":     "内容",
+		"title":       "标题",
+		"remarks":     "备注",
 	}
-	var chineseName string
-
-	// 遍历数据
-	for _, pair := range data {
-		if len(pair) == 2 && pair[0] == englishName {
-			chineseName = pair[1]
-			return chineseName
-		}
+	if v, ok := kv[englishName]; ok {
+		return v
 	}
 	return englishName
 }
