@@ -14,6 +14,11 @@
       "columns": [
         
   {
+    "name": "id",
+    "label": "id",
+    "type": "text"
+  },
+  {
     "name": "username",
     "label": "用户名",
     "type": "text"
@@ -21,6 +26,26 @@
   {
     "name": "password",
     "label": "密码",
+    "type": "text"
+  },
+  {
+    "name": "integral",
+    "label": "积分",
+    "type": "text"
+  },
+  {
+    "name": "created_at",
+    "label": "创建时间",
+    "type": "text"
+  },
+  {
+    "name": "updated_at",
+    "label": "更新时间",
+    "type": "text"
+  },
+  {
+    "name": "deleted_at",
+    "label": "删除时间",
     "type": "text"
   }
 ,{
@@ -43,6 +68,11 @@
                   "body": [
                     
   {
+    "name": "id",
+    "label": "id",
+    "type": "input-number"
+  },
+  {
     "name": "username",
     "label": "用户名",
     "type": "input-text"
@@ -51,6 +81,26 @@
     "name": "password",
     "label": "密码",
     "type": "input-text"
+  },
+  {
+    "name": "integral",
+    "label": "积分",
+    "type": "input-number"
+  },
+  {
+    "name": "created_at",
+    "label": "创建时间",
+    "type": "input-datetime"
+  },
+  {
+    "name": "updated_at",
+    "label": "更新时间",
+    "type": "input-datetime"
+  },
+  {
+    "name": "deleted_at",
+    "label": "删除时间",
+    "type": "input-datetime"
   }
 
 
@@ -71,6 +121,11 @@
                   "body": [
                     
   {
+    "name": "id",
+    "label": "id",
+    "type": "static"
+  },
+  {
     "name": "username",
     "label": "用户名",
     "type": "static"
@@ -78,6 +133,26 @@
   {
     "name": "password",
     "label": "密码",
+    "type": "static"
+  },
+  {
+    "name": "integral",
+    "label": "积分",
+    "type": "static"
+  },
+  {
+    "name": "created_at",
+    "label": "创建时间",
+    "type": "static"
+  },
+  {
+    "name": "updated_at",
+    "label": "更新时间",
+    "type": "static"
+  },
+  {
+    "name": "deleted_at",
+    "label": "删除时间",
     "type": "static"
   }
 
@@ -133,6 +208,11 @@
               "body": [
                 
   {
+    "name": "id",
+    "label": "id",
+    "type": "input-number"
+  },
+  {
     "name": "username",
     "label": "用户名",
     "type": "input-text"
@@ -141,6 +221,26 @@
     "name": "password",
     "label": "密码",
     "type": "input-text"
+  },
+  {
+    "name": "integral",
+    "label": "积分",
+    "type": "input-number"
+  },
+  {
+    "name": "created_at",
+    "label": "创建时间",
+    "type": "input-datetime"
+  },
+  {
+    "name": "updated_at",
+    "label": "更新时间",
+    "type": "input-datetime"
+  },
+  {
+    "name": "deleted_at",
+    "label": "删除时间",
+    "type": "input-datetime"
   }
 
 

@@ -77,6 +77,7 @@ func E常见字段对应的输入控件(typeName string) string {
 	kv["varchar"] = "input-text"
 	kv["text"] = "textarea"
 	kv["datetime"] = "input-datetime"
+	kv["timestamp"] = "input-datetime"
 	kv["bool"] = "switch"
 	// 如果没有的话返回 input-text
 	if v, ok := kv[typeName]; ok {
