@@ -2,43 +2,101 @@ package Controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/duolabmeng6/ecli/cmd"
+	"github.com/duolabmeng6/goefun/edb"
+	"github.com/duolabmeng6/goefun/egin"
 	"github.com/gin-gonic/gin"
+	"go-gin-amis/app/dal"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"golang.org/x/text/unicode/norm"
 )
 
 type AutoController struct {
+	db *edb.Mysql数据库操作类
 }
 
 func (b *AutoController) Init() {
-}
+	b.db = dal.E数据库操作
 
+}
+func (b *AutoController) GetAllTableName(c *gin.Context) {
+	info, err := b.db.GetAllTableName()
+	fmt.Println(info, err)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status": 1,
+			"msg":    "查询表结构失败",
+			"data":   "",
+		})
+		return
+	}
+
+	var options []gin.H
+	for _, v := range info {
+		options = append(options, gin.H{
+			"label": v,
+			"value": v,
+		})
+	}
+	c.JSON(200, gin.H{
+		"status": 0,
+		"msg":    "所有表名称",
+		"data": gin.H{
+			//"label":   "选项",
+			//"type":    "select",
+			//"name":    "select",
+			"options": options,
+		},
+	})
+	return
+}
 func (b *AutoController) Get(c *gin.Context) {
+	var req struct {
+		TableName string `i:"table_name" rule:"required" msg:"table_name 必填"`
+	}
+	if err := egin.Verify(c, &req); err != nil {
+		c.JSON(200, gin.H{
+			"status": 1,
+			"msg":    err.Error(),
+			"data":   "",
+		})
+		return
+	}
+	tableName := req.TableName
+	info, err := b.db.GetTableInfo(tableName)
+	fmt.Println(info, err)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status": 1,
+			"msg":    "查询表结构失败",
+			"data":   "",
+		})
+		return
+	}
+	tableCol := make([]gin.H, 0)
+	for _, k := range info.Keys() {
+		v, _ := info.Get(k)
+		tableCol = append(tableCol, gin.H{
+			"name":      k,
+			"translate": cmd.E常见英文翻译函数(k),
+			"type":      cmd.E常见字段对应的输入控件(v["dataType"].(string)),
+			"dataType":  v["dataType"],
+		})
+	}
+	RootPath := "/Users/chensuilong/Desktop/goproject/go-gin-amis/"
+
 	c.JSON(200, gin.H{
 		"status": 0,
 		"msg":    "",
 		"data": gin.H{
-			"tableName":      "users",
-			"tableTranslate": "用户",
-			"ctlPath":        "/Users/chensuilong/Desktop/goproject/go-gin-amis/app/Http/Controllers/usersController.go",
-			"dataPath":       "/Users/chensuilong/Desktop/goproject/go-gin-amis/app/serv/usersServ.go",
-			"curdPath":       "/Users/chensuilong/Desktop/goproject/go-gin-amis/public/pages/usersPage.json",
-			"tableCol": []gin.H{
-				gin.H{
-					"name":      "username",
-					"translate": "用户名",
-					"type":      "input-text",
-					"dataType":  "varchat",
-				},
-				gin.H{
-					"name":      "password",
-					"translate": "密码",
-					"type":      "input-text",
-					"dataType":  "varchat",
-				},
-			},
+			"tableName":      req.TableName,
+			"tableTranslate": cmd.E常见英文翻译函数(req.TableName),
+			"ctlPath":        RootPath + "/app/Http/Controllers/" + tableName + "Controller.go",
+			"dataPath":       RootPath + "/app/serv/" + tableName + "Serv.go",
+			"curdPath":       RootPath + "/public/pages/" + tableName + "Page.json",
+			"tableCol":       tableCol,
 		},
 	})
 }

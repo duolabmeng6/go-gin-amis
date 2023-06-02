@@ -3,42 +3,60 @@
   "title": "代码生成器",
   "body": [
     {
+      "name": "detailForm",
+      "initApi": "/auto/get/${select}",
+      "initFetchOn": "data.select",
       "type": "form",
       "title": "表单",
+
       "body": [
         {
-          "label": "表名",
-          "type": "input-text",
-          "name": "tableName",
-          "id": "u:f7fc98a6c980"
+          "label": "请选择数据库中的表 选择后数据会自动填充",
+          "type": "select",
+          "name": "select",
+          "source": "/auto/get_all_table_name",
+          "addOn": {
+            "type": "submit",
+            "label": "确定",
+            "primary": true
+          }
         },
         {
-          "label": "翻译表名",
-          "type": "input-text",
-          "name": "tableTranslate",
-          "id": "u:e69de6b5dbd7"
-        },
-
+          "type": "group",
+          "body": [
+            {
+              "label": "表名",
+              "type": "input-text",
+              "name": "tableName",
+              "id": "u:f7fc98a6c980"
+            },
+            {
+              "label": "翻译表名",
+              "type": "input-text",
+              "name": "tableTranslate",
+              "id": "u:e69de6b5dbd7"
+            }
+          ]},
         {
-          "label": "控制器",
+          "label": "控制器文件生成路径",
           "name": "ctlPath",
           "type": "input-text",
           "id": "u:f57abffc7d5f"
         },
         {
-          "label": "数据仓库",
+          "label": "数据操作服务文件生成路径",
           "name": "dataPath",
           "type": "input-text",
           "id": "u:a37161ee2ea9"
         },
         {
-          "label": "CURD页面JSON",
+          "label": "页面JSON文件生成路径",
           "name": "curdPath",
           "type": "input-text",
           "id": "u:a37161ee2ea0"
         },
         {
-          "label": "字段数据",
+          "label": "字段数据 不用改",
           "name": "tableCol",
           "type": "input-text",
           "id": "u:a37161ee2ea9"
@@ -82,7 +100,7 @@
                   "value": "textarea"
                 },
                 {
-                  "label": "input-number 多行文本",
+                  "label": "input-number 数字输入框",
                   "value": "input-number"
                 },
                 {
@@ -126,23 +144,7 @@
         "url": "/auto/created",
         "method": "post"
       },
-      "id": "u:3b8501f51979",
-      "onEvent": {
-        "inited": {
-          "weight": 0,
-          "actions": [
-          ]
-        }
-      },
-      "initApi": {
-        "url": "/auto/get/users",
-        "method": "get",
-        "requestAdaptor": "",
-        "adaptor": "",
-        "messages": {
-        },
-        "dataType": "json"
-      }
+      "id": "u:3b8501f51979"
     }
   ],
   "id": "u:b4ee737fa2d3",

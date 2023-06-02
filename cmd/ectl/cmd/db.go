@@ -44,7 +44,7 @@ var dbCmd = &cobra.Command{
 			return
 		}
 		//info=0 提示错误
-		if len(info) == 0 {
+		if info.Len() == 0 {
 			fmt.Println("查询表结构失败。")
 			return
 		}
@@ -58,7 +58,8 @@ var dbCmd = &cobra.Command{
 		columnsLook := make([]Column, 0)
 		columnsEdit := make([]Column, 0)
 		columnsAdd := make([]Column, 0)
-		for k, v := range info {
+		for _, k := range info.Keys() {
+			v, _ := info.Get(k)
 			字段名称 := k
 			字段类型 := v["dataType"]
 			字段备注 := v["comment"]

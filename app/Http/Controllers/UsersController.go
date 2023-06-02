@@ -11,11 +11,11 @@ import (
 )
 
 type UsersController struct {
-	用户操作 serv.E用户操作
+	Users serv.EUsersServ
 }
 
 func (b *UsersController) Init() {
-	b.用户操作 = serv.S用户操作
+	b.Users = serv.SUsersServ
 }
 
 func (b *UsersController) Index(c *gin.Context, req *struct {
@@ -25,7 +25,8 @@ func (b *UsersController) Index(c *gin.Context, req *struct {
 	OrderBy  string `i:"orderBy" default:"id"`
 	OrderDir string `i:"orderDir" default:"desc"`
 }) (gin.H, error) {
-	articles, total, err := b.用户操作.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
+
+	articles, total, err := b.Users.Index(req.Keywords, req.PerPage, req.Page, req.OrderBy, req.OrderDir)
 	if err != nil {
 		return nil, err
 	}
@@ -44,13 +45,12 @@ func (b *UsersController) Create(c *gin.Context) {
 	})
 }
 func (b *UsersController) Store(c *gin.Context) (gin.H, error) {
-	// 插入数据库
-	req := egin.IAll(c)
-	id, err := b.用户操作.Insert(req)
+	articleData := egin.IAll(c)
+	id, err := b.Users.Insert(articleData)
 	if err != nil {
 		return nil, err
 	}
-	article, err := b.用户操作.FindOne(id)
+	article, err := b.Users.FindOne(id)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (b *UsersController) Show(c *gin.Context) {
 func (b *UsersController) Edit(c *gin.Context, req *struct {
 	Id int64 `i:"id" rule:"required" msg:"id 必填"`
 }) (gin.H, error) {
-	article, err := b.用户操作.FindOne(req.Id)
+	article, err := b.Users.FindOne(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -80,26 +80,22 @@ func (b *UsersController) Edit(c *gin.Context, req *struct {
 	}, nil
 }
 func (b *UsersController) Update(c *gin.Context) (gin.H, error) {
-	req := egin.IAll(c)
-	err := b.用户操作.Update(req)
-	if err != nil {
-		return nil, err
-	}
-	article, err := b.用户操作.FindOne(req["id"].(int64))
+	articleData := egin.IAll(c)
+	err := b.Users.Update(articleData)
 	if err != nil {
 		return nil, err
 	}
 	return gin.H{
 		"status": 0,
 		"msg":    "更新成功",
-		"data":   article,
+		//"data":   article,
 	}, nil
 }
 func (b *UsersController) Destroy(c *gin.Context, req *struct {
 	Id int64 `i:"id" rule:"required" msg:"id 必填"`
 }) (gin.H, error) {
 
-	err := b.用户操作.Delete(req.Id)
+	err := b.Users.Delete(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +117,7 @@ func (b *UsersController) BulkDelete(c *gin.Context, req *struct {
 	for _, id := range idsArr {
 		// 删除
 		idint, _ := strconv.ParseInt(id, 10, 64)
-		err := b.用户操作.Delete(idint)
+		err := b.Users.Delete(idint)
 		if err != nil {
 			return nil, err
 		}

@@ -13,14 +13,16 @@ var MySQLDSN = "root@tcp(127.0.0.1:3310)/gotest?charset=utf8&parseTime=true&loc=
 var DB *gorm.DB
 var once sync.Once
 var Edb *edb.MySQLQueryBuilder
+var E数据库操作 *edb.Mysql数据库操作类
 
 func init() {
 	fmt.Println("初始化数据库")
 	once.Do(func() {
 		DB = ConnectDB()
-		数据库操作 := edb.NewMysql数据库操作类()
-		数据库操作.E连接数据库(MySQLDSN)
-		Edb = edb.NewMySQL查询构建器(数据库操作)
+		E数据库操作 = edb.NewMysql数据库操作类()
+		E数据库操作.E连接数据库(MySQLDSN)
+
+		Edb = edb.NewMySQL查询构建器(E数据库操作)
 	})
 }
 

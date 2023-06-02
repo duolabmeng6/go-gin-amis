@@ -11,11 +11,11 @@ import (
 )
 
 type {{ .TableName }}Controller struct {
-	{{ .TableName }} serv.E{{ .TableName }}
+	{{ .TableName }} serv.E{{ .TableName }}Serv
 }
 
 func (b *{{ .TableName }}Controller) Init() {
-	b.{{ .TableName }} = serv.S{{ .TableName }}
+	b.{{ .TableName }} = serv.S{{ .TableName }}Serv
 }
 
 func (b *{{ .TableName }}Controller) Index(c *gin.Context, req *struct {

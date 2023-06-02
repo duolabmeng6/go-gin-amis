@@ -14,38 +14,13 @@
       "columns": [
         
   {
-    "name": "deleted_at",
-    "label": "deleted_at",
-    "type": "text"
-  },
-  {
-    "name": "id",
-    "label": "id",
-    "type": "text"
-  },
-  {
     "name": "username",
-    "label": "username",
+    "label": "用户名",
     "type": "text"
   },
   {
     "name": "password",
-    "label": "password",
-    "type": "text"
-  },
-  {
-    "name": "integral",
-    "label": "integral",
-    "type": "text"
-  },
-  {
-    "name": "created_at",
-    "label": "created_at",
-    "type": "text"
-  },
-  {
-    "name": "updated_at",
-    "label": "updated_at",
+    "label": "密码",
     "type": "text"
   }
 ,{
@@ -68,38 +43,13 @@
                   "body": [
                     
   {
-    "name": "deleted_at",
-    "label": "deleted_at",
-    "type": "input-text"
-  },
-  {
-    "name": "id",
-    "label": "id",
-    "type": "input-text"
-  },
-  {
     "name": "username",
-    "label": "username",
+    "label": "用户名",
     "type": "input-text"
   },
   {
     "name": "password",
-    "label": "password",
-    "type": "input-text"
-  },
-  {
-    "name": "integral",
-    "label": "integral",
-    "type": "input-text"
-  },
-  {
-    "name": "created_at",
-    "label": "created_at",
-    "type": "input-text"
-  },
-  {
-    "name": "updated_at",
-    "label": "updated_at",
+    "label": "密码",
     "type": "input-text"
   }
 
@@ -121,38 +71,13 @@
                   "body": [
                     
   {
-    "name": "deleted_at",
-    "label": "deleted_at",
-    "type": "static"
-  },
-  {
-    "name": "id",
-    "label": "id",
-    "type": "static"
-  },
-  {
     "name": "username",
-    "label": "username",
+    "label": "用户名",
     "type": "static"
   },
   {
     "name": "password",
-    "label": "password",
-    "type": "static"
-  },
-  {
-    "name": "integral",
-    "label": "integral",
-    "type": "static"
-  },
-  {
-    "name": "created_at",
-    "label": "created_at",
-    "type": "static"
-  },
-  {
-    "name": "updated_at",
-    "label": "updated_at",
+    "label": "密码",
     "type": "static"
   }
 
@@ -208,38 +133,13 @@
               "body": [
                 
   {
-    "name": "deleted_at",
-    "label": "deleted_at",
-    "type": "input-text"
-  },
-  {
-    "name": "id",
-    "label": "id",
-    "type": "input-text"
-  },
-  {
     "name": "username",
-    "label": "username",
+    "label": "用户名",
     "type": "input-text"
   },
   {
     "name": "password",
-    "label": "password",
-    "type": "input-text"
-  },
-  {
-    "name": "integral",
-    "label": "integral",
-    "type": "input-text"
-  },
-  {
-    "name": "created_at",
-    "label": "created_at",
-    "type": "input-text"
-  },
-  {
-    "name": "updated_at",
-    "label": "updated_at",
+    "label": "密码",
     "type": "input-text"
   }
 

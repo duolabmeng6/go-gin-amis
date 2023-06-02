@@ -8,7 +8,7 @@ replace github.com/duolabmeng6/ecli => /Users/chensuilong/Desktop/goproject/go-g
 
 require (
 	github.com/duolabmeng6/ecli v0.0.0-00010101000000-000000000000
-	github.com/duolabmeng6/goefun v1.1.9
+	github.com/duolabmeng6/goefun v1.2.1
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-sql-driver/mysql v1.7.0
 	golang.org/x/text v0.9.0
@@ -25,6 +25,7 @@ require (
 	github.com/bytedance/sonic v1.8.8 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/clbanning/mxj/v2 v2.5.5 // indirect
+	github.com/elliotchance/orderedmap/v2 v2.2.0 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
